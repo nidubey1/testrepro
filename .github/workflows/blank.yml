@@ -3,9 +3,7 @@ name: Deploy Logic App
 
 #Set the action on which the workflow will trigger
 on:
- push:
-   branches:
-     - master
+   - workflow_dispatch
 
 jobs:
   validate-and-deploy:
