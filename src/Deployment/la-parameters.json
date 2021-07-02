@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": { 
+        "location": {
+            "value": "Australia Southeast"
+        },
+        "environmentName": {
+            "value": "Testing"
+        },
+        "projectName": {
+            "value": "enterpriseIT-BizTalk-LaSample"
+        },
+        "logicAppName": {
+            "value": "La-weu-devops-sample"
+        },
+        "appServicePlanName": {
+            "value": "ASP-DefaultResourceGroupEUS-bc81"
+        },
+        "storageName": {
+            "value": "sstorageaccountrgweu931d"
+        },
+        "kind": {
+            "value": "StorageV2"
+        },
+        "skuName": {
+            "value": "Standard_LRS"
+        },
+        "skuTier": {
+            "value": "Standard"
+          }
+        }
+    }
