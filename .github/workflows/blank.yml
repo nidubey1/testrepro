@@ -1,0 +1,54 @@
+#Name of the GitHub Action
+name: Deploy Logic App
+
+#Set the action on which the workflow will trigger
+on:
+ push:
+   branches:
+     - master
+
+jobs:
+  validate-and-deploy:
+   runs-on: ubuntu-latest
+   env:
+     ENV_RESOURCEGROUP: RG-weu-bts-dev
+     ENV_RESOURCEGROUPLOCATION: westeurope
+
+   steps:
+
+    #Checkout the repository
+    - name: Checkout Repository
+      uses: actions/checkout@master
+
+    #Use the azure provided action to log on to azure using service pricipal
+    - name: Test-aap
+      uses: azure/login@v1
+      with:
+       creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # Create the resource group
+    - name: Create Resource Group
+      run: az group create -n ${{env.ENV_RESOURCEGROUP}} -l ${{env.ENV_RESOURCEGROUPLOCATION}}
+
+    #Validate the  ARM template
+    - name: Validate ARM template
+      run: |
+        az deployment group validate -g ${{env.ENV_RESOURCEGROUP}} --mode Incremental --template-file ./src/Deployment/la-template.json --parameters ./src/Deployment/la-parameters.json
+    
+    #Deploy the ARM Template
+    - name: Deploy Logic App
+      run: |
+       echo "::set-env name=logicappurl::$(az deployment group create -g RG-weu-bts-dev --template-file ./src/Deployment/la-template.json --parameters ./src/Deployment/la-parameters.json --query 'properties.outputs.logicAppUrl.value' -o tsv)">>$GITHUB_ENV
+       
+      shell: bash  
+
+    # Log Out From Azure 
+    - name: Logout
+      run: az logout
+
+    - name: set up node
+      uses: actions/setup-node@v1
+      with:
+          node-version: '12.x'
+
+    - name: Install newman
+      run: npm install -g newman
