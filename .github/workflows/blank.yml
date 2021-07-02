@@ -9,7 +9,7 @@ jobs:
   validate-and-deploy:
    runs-on: ubuntu-latest
    env:
-     ENV_RESOURCEGROUP: RG-weu-bts-dev
+     ENV_RESOURCEGROUP: RG-weu-bts-dev_t
      ENV_RESOURCEGROUPLOCATION: westeurope
 
    steps:
